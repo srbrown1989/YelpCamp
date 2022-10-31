@@ -65,6 +65,7 @@
     </div>
   </div>
   <div class="col-6">
+    <div class="map" id="map" style="width: 400px; height: 300px"></div>
     <% if(currentUser){ %>
     <h2>Leave a Review</h2>
     <form
@@ -134,3 +135,24 @@
     <% } %>
   </div>
 </div>
+
+<script>
+  const mapToken = "pk.eyJ1Ijoic3Jicm93bjE5ODkiLCJhIjoiY2w5d244aXFqMDJlbzN4azg4bDl0czMybSJ9._an3z8N1QBni9qJLpIF-Fw";
+  const campground = <%- JSON.stringify(campground) %>;
+  mapboxgl.accessToken = mapToken
+  const map = new mapboxgl.Map({
+    container: "map",
+    style: "mapbox://styles/mapbox/light-v10", // stylesheet location
+    center: campground.geometry.coordinates, // starting position [lng, lat]
+    zoom: 10, // starting zoom
+  });
+
+  new mapboxgl.Marker()
+    .setLngLat(campground.geometry.coordinates)
+    .setPopup(
+      new mapboxgl.Popup({ offset: 25 }).setHTML(
+        `<h3>${campground.title}</h3><p>${campground.location}</p>`
+      )
+    )
+    .addTo(map);
+</script>
